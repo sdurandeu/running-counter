@@ -1,0 +1,24 @@
+﻿<div class="login">
+    <div class="row">
+        <form class="form-signin col-md-offset-4 col-md-4" name="loginForm">
+            <h1>Log in</h1>
+
+            <div ng-show="loginError" class="alert alert-danger">
+                Your username or password are incorrect.
+            </div>
+
+            <div class="form-group">
+                <label for="username" class="sr-only">Username</label>
+                <input id="username" ng-model="loginData.userName" class="form-control" placeholder="Username" required="" autofocus autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label for="password" class="sr-only">Password</label>
+                <input type="password" ng-model="loginData.password" id="password" class="form-control" placeholder="Password" required autocomplete="off">
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="login()">Log in</button>
+
+            <p class="text-center new-user-login">New user? <a href="#/signup">Create a new account</a></p>
+        </form>
+    </div>
+
+</div>

@@ -1,0 +1,27 @@
+﻿<div class="signup">
+    <div class="row">
+        <form class="col-md-offset-4 col-md-4" name="signupForm">
+            <h1 class="form-login-heading">Sign up</h1>
+
+            <div class="form-group">
+                <input type="text" class="form-control" placeholder="Username" ng-model="registration.userName" required autofocus>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="Password" ng-model="registration.password" required>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" placeholder="Confirm Password" ng-model="registration.confirmPassword" required>
+            </div>
+            <button class="btn btn-lg btn-primary btn-block" type="submit" ng-click="signUp()">Submit</button>
+        </form>
+    </div>
+
+    <div class="row">
+        <div ng-show="savedSuccessfully" class="message col-md-offset-4 col-md-4 alert alert-success">
+            New user created successfully, click <a ng-click="browseLogin()">here</a> to log in.
+        </div>
+        <div ng-show="errorMessages" class="message col-md-offset-4 col-md-4 alert alert-danger">
+            Failed to sign up user due to: {{errorMessages}}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,154 @@
+﻿<!-- Header and Kilometers Run -->
+<div class="header">
+    <div class="row">
+        <div class="col-md-5">
+            <h1 class="text-uppercase">Activities</h1>
+        </div>
+        <div class="col-md-4 col-md-offset-3 activities-consumed text-uppercase text-muted">
+            <div class="activities-consumed-number" ng-class="todayKilometers >= userSettings.kilometersGoal ? 'activities-ok' : 'activities-exceeded'">{{todayKilometers || 0}}</div>
+            <div>
+                kilometers run this week
+                <span class="glyphicon glyphicon-info-sign" aria-hidden="true" tooltip-placement="bottom" uib-tooltip="You have {{getRemainingKilometers()}} kilometers still remaining this week. You can edit your kilometers goal from your user settings."></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- New Activity Form -->
+<div class="jumbotron jumbotron-reduced">
+    <form class="new-activity" name="newActivityForm" ng-submit="addActivity()">
+        <div class="row">
+            <div class="col-md-4 form-group form-group-lg">
+                <label for="title" class="control-label">Where</label>
+                <input type="text" ng-model="newActivity.title" name="title" class="form-control input-lg" autofocus required placeholder="where did you run?">
+            </div>
+            <div class="col-md-2 form-group form-group-lg">
+                <label for="kilometers">Kilometers</label>
+                <input type="number" ng-model="newActivity.kilometers" name="kilometers" min="1" max="9999" class="form-control input-lg" required placeholder="how many?">
+            </div>
+
+            <div class="col-md-4 form-group">
+                <label for="activity-kilometers" class="control-label">Date and Time</label>
+                <div class="input-group">
+                    <input type="text" ng-model="newActivity.date" name="date" class="form-control input-lg" uib-datepicker-popup="dd-MMMM-yyyy" is-open="datePickerAddOpened" ng-required="true" close-text="Close" show-weeks="false" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default btn-lg" ng-click="datePickerAddOpened = true"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="col-md-2 form-group form-group-lg">
+                <label class="hidden control-label" for="activity-datetime">Time</label>
+                <uib-timepicker name="time" ng-model="newActivity.date" show-meridian="false" class="time-picker"></uib-timepicker>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary btn-lg">Add Activity</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Activity Filters -->
+<div class="jumbotron jumbotron-reduced">
+    <div class="row">
+        <form name="ActivityFilters" class="filters form-inline col-md-12">
+            <div class="form-group" ng-class="{ 'has-error': ActivityFilters.filterDateFrom.$invalid && ActivityFilters.filterDateFrom.$dirty }">
+                <label class="control-label" for="filterDateFrom">Date From:</label>
+                <div class="input-group">
+                    <input type="text" name="filterDateFrom" ng-model="filterDateFrom" class="form-control datepicker" uib-datepicker-popup="dd-MMMM-yyyy" placeholder="01-January-2016" is-open="datePickerFromOpened" close-text="Close" show-weeks="false" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default datepicker" ng-click="datePickerFromOpened = true"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></button>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error': ActivityFilters.filterDateTo.$invalid && ActivityFilters.filterDateTo.$dirty }">
+                <label class="control-label" for="filterDateTo">Date To:</label>
+                <div class="input-group">
+                    <input type="text" name="filterDateTo" ng-model="filterDateTo" class="form-control" uib-datepicker-popup="dd-MMMM-yyyy" placeholder="31-January-2016" is-open="datePickerToOpened" close-text="Close" show-weeks="false" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" ng-click="datePickerToOpened = true"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></button>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group" ng-class="{ 'has-error': ActivityFilters.filterTimeFrom.$invalid && ActivityFilters.filterTimeFrom.$dirty }">
+                <label class="control-label" for="filterTimeFrom">Time From:</label>
+                <input type="number" min="0" max="24" maxlength="2" name="filterTimeFrom" class="form-control timepicker" ng-model="filterTimeFrom" placeholder="0-24" />
+            </div>
+            <div class="form-group" ng-class="{ 'has-error': ActivityFilters.filterTimeTo.$invalid && ActivityFilters.filterTimeTo.$dirty }">
+                <label class="control-label" for="filterTimeTo">Time To:</label>
+                <input type="number" min="0" max="24" maxlength="2" name="filterTimeTo" class="form-control timepicker" ng-model="filterTimeTo" placeholder="0-24" />
+            </div>
+            <a class="clear-filters" ng-click="resetFilters()">Clear All</a>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="average-kilometers col-md-12" ng-show="filteredActivities.length > 0">
+        Average Kilometers: {{averageKilometers}}
+    </div>
+</div>
+
+<!-- Activities List -->
+<div class="row">
+    <div class="col-md-12">
+        <ul class="activity-list list-unstyled">
+            <li ng-repeat="activity in filteredActivities = (activities | dateFromTofilter:filterDateFrom:filterDateTo:filterTimeFrom:filterTimeTo | orderBy:'-date')">
+                <!-- Display template -->
+                <div ng-show="activity != editedActivity" class="repeat-item-animation">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="title">{{activity.title}}</div>
+                            <div>{{activity.date | date:'M/d/yy H:mm'}}</div>
+                        </div>
+                        <div class="kilometers col-md-offset-6 col-md-2">
+                            {{activity.kilometers}} kilometers
+                        </div>
+                    </div>
+                    <div class="activity-commands text-uppercase">
+                        <a ng-click="editActivity(activity)">Edit</a>
+                        <a ng-click="showDeleteConfirmation(activity)">Delete</a>
+                    </div>
+                </div>
+                <!-- Edit template -->
+                <form name="editActivityForm" ng-show="activity == editedActivity">
+                    <div class="row">
+                        <div class="form-group col-md-4" ng-class="{ 'has-error': editActivityForm.title.$invalid && editActivityForm.title.$dirty }">
+                            <input ng-model="editedActivity.title" name="title" type="text" class="title form-control" required>
+                        </div>
+                        <div class="kilometers activities-edit col-md-offset-5 col-md-3" ng-class="{ 'has-error': editActivityForm.kilometers.$invalid && editActivityForm.kilometers.$dirty }">
+                            <input ng-model="editedActivity.kilometers" name="kilometers" class="form-control" type="number" min="1" max="9999" required> kilometers
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group datetime-edit col-md-4" ng-class="{ 'has-error': editActivityForm.parsedDate.$invalid && editActivityForm.parsedDate.$dirty }">
+                            <input type="datetime-local" ng-model="editedActivity.parsedDate" placeholder="yyyy-MM-ddTHH:mm:ss" name="date" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="activity-commands text-uppercase">
+                        <a class="btn-success btn-sm" ng-click="saveEditedActivity(editedActivity)">Save</a>
+                        <a ng-click="cancelEdit(editedActivity)">Cancel</a>
+                    </div>
+                </form>
+            </li>
+        </ul>
+        <div ng-show="filteredActivities.length == 0" class="repeat-item-animation empty-results">No activities</div>
+    </div>
+</div>
+
+<!-- Delete confirmation -->
+<script type="text/ng-template" id="activity-delete-confirmation-modal.html">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Delete Confirmation</h4>
+    </div>
+    <div class="modal-body">
+        <p>Do you really want to delete the activity?</p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" ng-click="cancel()">Cancel</button>
+        <button type="button" class="btn btn-danger" ng-click="ok()">Delete</button>
+    </div>
+</script>

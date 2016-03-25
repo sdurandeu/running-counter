@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Counter</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <style>
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }
+    </style>
+    <meta name="description" content="Application for counting running activities" />
+</head>
+<body ng-app="RunningCounterApp" ng-strict-di ng-cloak>
+    <div ng-include="'scripts/app/views/navbar.html'"></div>
+
+    <div class="container body-content">
+        <div ng-view></div>
+        <hr />
+        <footer>
+            <p class="pull-right">Created by Sebastian Durandeu</p>
+            <p>&copy; @DateTime.Now.Year - Running Counter</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/angular")
+</body>
+</html>
+

@@ -1,0 +1,40 @@
+﻿<nav class="navbar navbar-default navbar-fixed-top" ng-controller="NavbarController">
+    <div class="container">
+        <div class="navbar-header">
+            <a href="#/" class="navbar-brand"><span class="glyphicon glyphicon-scale"></span> Running Counter</a>
+        </div>
+        <ul class="nav navbar-nav navbar-left">
+            <li ng-hide="!authentication.isAuth"><a href="#/home">My Activities</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown" ng-hide="!authentication.isAuth">
+                <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Welcome {{authentication.userName}}! <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a ng-click="openSettings()">Edit kilometers goal</a></li>
+                    <li><a ng-click="manageUsers()" ng-show="userSettings.isAdmin">Manage users</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a ng-click="logOut()">Log out</a></li>
+                </ul>
+            </li>
+            <li ng-hide="authentication.isAuth"> <a href="#/login">Log in</a></li>
+            <li ng-hide="authentication.isAuth"> <a href="#/signup">Sign up</a></li>
+        </ul>
+    </div>
+</nav>
+
+<script type="text/ng-template" id="user-settings-modal.html">
+    <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title">Edit User Settings</h3>
+    </div>
+    <div class="modal-body">
+        <div class="form-group">
+            <label>Kilometers Goal per Week</label>
+            <input ng-model="kilometersGoal" type="number" class="form-control" placeholder="kilometers run" autofocus>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" type="button" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-primary" type="button" ng-click="ok()">Save</button>
+    </div>
+</script>
