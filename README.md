@@ -10,6 +10,7 @@
 * Angular.js 1.4.3 + Angular UI Bootstrap
 * Boostrap 3
 * OAuth2 Resource Owner Password Credentials Grant
+  - see [this post](http://bitoftech.net/2014/06/09/angularjs-token-authentication-using-asp-net-web-api-2-owin-asp-net-identity/) together with [this post](http://bitoftech.net/2014/06/01/token-based-authentication-asp-net-web-api-2-owin-asp-net-identity/)
 
 ### Code Style
 * Angular.js: The code tries to follow the guidelines from John's Papa Style Guidelines: https://github.com/johnpapa/angular-styleguide
